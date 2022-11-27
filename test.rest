@@ -1,0 +1,27 @@
+POST http://localhost:3000/mailService/add_task/
+Content-Type: application/json
+
+{
+    "name" : "ftest_task1",
+    "dependencies" : [],
+    "priority" : 2,
+    "timestamp" : "2022-11-22T15:04:26+0000",
+    "subject" : "test  message",
+    "message" : "hello world!!2",
+    "receiver" : "test@email.com"
+}
+###
+POST http://localhost:5000/smsService/add_task/
+Content-Type: application/json
+
+{
+    "name" : "ftest_task5",
+    "dependencies" : ["ftest_task1"],
+    "priority" : 1,
+    "timestamp" : "2022-11-22T15:04:26+0000",
+    "subject" : "test  message",
+    "message" : "hello world!!7",
+    "receiver" : "1234567890"
+}
+###
+GET http://localhost:8000/schedule/
