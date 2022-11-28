@@ -29,7 +29,8 @@ let app = new express();
                 name : {
                     [Op.in] : dependencies,
                     [Op.not] : taskInfo.name
-                }
+                },
+                attributes: ['id']
             }
         })
         const [task,created] = await Task.findOrCreate({
@@ -38,6 +39,9 @@ let app = new express();
             },
             defaults: {type: 'mail',...taskInfo}
         });
+        dependencies = dependencies.map((dep) => {
+            return dep.dataValues.id
+        })
         let queries = []
         dependencies.forEach((dep) => {
             queries.push(task.addDependancy(dep))
@@ -60,6 +64,9 @@ let app = new express();
                 }
             },
             attributes: ['id']
+        })
+        dependencies = dependencies.map((dep) => {
+            return dep.dataValues.id
         })
         const [task,created] = await Task.findOrCreate({
             where : {
@@ -88,10 +95,10 @@ app.get('/schedule',(req,res) => {
     }
     res.send(taskSchedule);
 } )
-function executeJobs(taskQueue){
+function executeJobs(taskQueue){                                   
     while(taskQueue.size()){
         console.log(taskQueue.nextTask().name)
     }
 }
 
-app.listen(8000)
+app.listen(8000)                    
